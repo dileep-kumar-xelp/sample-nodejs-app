@@ -1,7 +1,9 @@
 const express = require("express");
 const app = express();
+const myLib = require("./lib");
 app.get("/", (req, res) => {
-  res.send("Hello world from a Node.js app!");
+  const welcome = myLib.helloWorld();
+  res.send(`${welcome} from a Node.js app with docker!`);
 });
 app.listen(3000, () => {
   console.log("Server is up on 3000");
