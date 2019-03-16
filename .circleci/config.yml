@@ -18,12 +18,12 @@ jobs:
           key: dependency-cache-{{ checksum "package.json" }}
           paths:
             - ./node_modules
-      - run:
-          name: Linter Testing
-          command: npm run-script lint
-      - run:
-          name: Testing
-          command: npm test
+      # - run:
+      #     name: Linter Testing
+      #     command: npm run-script lint
+      # - run:
+      #     name: Testing
+      # command: npm test
   deploy:
     machine:
       enabled: true
