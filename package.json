@@ -14,6 +14,25 @@
     "express": "^4.16.4",
     "prettier": "^1.16.4"
   },
+  "jest": {
+    "moduleFileExtensions": [
+      "js",
+      "json"
+    ],
+    "testEnvironment": "node",
+    "testMatch": [
+      "**/?(*.)(spec|test).js"
+    ],
+    "transform": {
+      "^.+\\.jsx?$": "babel-jest"
+    }
+  },
+  "lint-staged": {
+    "*.js": [
+      "eslint",
+      "git add"
+    ]
+  },
   "devDependencies": {
     "babel-eslint": "^10.0.1",
     "eslint": "^5.15.2",
