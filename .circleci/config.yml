@@ -4,6 +4,7 @@ jobs:
     working_directory: ~/sample-nodejs-app
     docker:
       - image: circleci/node:9.11.2
+      - image: mongo:3.4.4
     steps:
       - checkout
       - run:
@@ -18,12 +19,12 @@ jobs:
           key: dependency-cache-{{ checksum "package.json" }}
           paths:
             - ./node_modules
-      # - run:
-      #     name: Linter Testing
-      #     command: npm run-script lint
-      # - run:
-      #     name: Testing
-      # command: npm test
+      - run:
+          name: Linter Testing
+          command: npm run-script lint
+      - run:
+          name: Testing
+          command: npm test
   deploy:
     machine:
       enabled: true
@@ -31,7 +32,7 @@ jobs:
       - run:
           name: Deploy Over SSH
           command: |
-            ssh $SSH_USER@$SSH_HOST "cd xecute-api && npm run-script deploy"
+            ssh $SSH_USER@$SSH_HOST "cd sample-nodejs-app && npm run-script deploy"
 workflows:
   version: 2
   build-and-deploy:
