@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "test--passWithNoTests",
+    "start": "nodemon src/index.js",
+    "test": "jest",
     "lint": "eslint.js"
   },
   "keywords": [],
@@ -12,7 +13,8 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.16.4",
-    "jest": "^24.5.0"
+    "jest": "^24.5.0",
+    "nodemon": "^1.18.10"
   },
   "devDependencies": {
     "eslint": "^5.15.2"
