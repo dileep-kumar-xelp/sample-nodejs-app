@@ -2,14 +2,21 @@
   "name": "sample-nodejs-app",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "nodemon src/index.js",
+    "test": "jest",
+    "lint": "eslint.js"
   },
   "keywords": [],
-  "author": "",
+  "author": "Dileep",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.16.4"
+    "express": "^4.16.4",
+    "jest": "^24.5.0",
+    "nodemon": "^1.18.10"
+  },
+  "devDependencies": {
+    "eslint": "^5.15.2"
   }
 }
