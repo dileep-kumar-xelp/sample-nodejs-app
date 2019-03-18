@@ -42,4 +42,4 @@ workflows:
             - build
           filters:
             branches:
-              only: MASTER
+              only: master
