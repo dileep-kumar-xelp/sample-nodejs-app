@@ -31,7 +31,7 @@ jobs:
       - run:
           name: Deploy Over SSH
           command: |
-            ssh $SSH_USER@$SSH_HOST "cd sample-nodejs-app && npm run-script deploy"
+            ssh ubuntu@ec2-52-66-243-203.ap-south-1.compute.amazonaws.com "cd sample-nodejs-app && npm run-script deploy"
 workflows:
   version: 2
   build-and-deploy:
