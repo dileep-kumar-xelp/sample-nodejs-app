@@ -5,7 +5,10 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
-    "lint": "eslint '**/*.js'"
+    "lint": "eslint '**/*.js'",
+    "start-staging": "yarn run build && pm2 startOrRestart ecosystem.config.js --env staging",
+    "start": "yarn run build  && pm2 startOrRestart ecosystem.config.js --env production ",
+    "deploy": "pm2 deploy ecosystem.config.js production --force"
   },
   "keywords": [],
   "author": "",
