@@ -27,7 +27,7 @@ deploy_to_stagging:
       - image: circleci/python:3.6.1
     environment:
       AWS_DEFAULT_OUTPUT: json
-         - run:
+      - run:
           name: Install awscli
           command: |
             python3 -m venv venv
