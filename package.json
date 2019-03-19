@@ -6,7 +6,7 @@
   "scripts": {
     "test": "jest",
     "lint": "eslint '**/*.js'",
-    "start-staging": "yarn run build && pm2 startOrRestart ecosystem.config.js --env staging",
+    "build": "babel -d ./build .",
     "start": "yarn run build  && pm2 startOrRestart ecosystem.config.js --env production ",
     "deploy": "pm2 deploy ecosystem.config.js production --force"
   },
@@ -14,6 +14,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
     "express": "^4.16.4",
     "prettier": "^1.16.4"
   },
