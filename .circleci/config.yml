@@ -25,8 +25,8 @@ jobs:
 deploy_to_stagging:
   docker:
     - image: circleci/python:3.6.1
-  # environment:
-  #   AWS_DEFAULT_OUTPUT: json
+  environment:
+    AWS_DEFAULT_OUTPUT: json
   #   - run:
   #       name: Install awscli
   #       command: |
