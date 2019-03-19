@@ -23,8 +23,8 @@ jobs:
           name: Testing
           command: npm run-script test
 deploy_to_stagging:
-   docker:
-      - image: circleci/python:3.6.1
+       docker:
+        - image: circleci/python:3.6.1
     environment:
          AWS_DEFAULT_OUTPUT: json
          - run:
