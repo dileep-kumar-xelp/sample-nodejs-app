@@ -1,5 +1,5 @@
 version: 2
-jobs:
+ jobs:
   build:
     working_directory: ~/agebold-api
     docker:
@@ -23,10 +23,10 @@ jobs:
           name: Testing
           command: npm run-script test
 deploy_to_stagging:
-       docker:
+        docker:
         - image: circleci/python:3.6.1
        environment:
-         AWS_DEFAULT_OUTPUT: json
+          AWS_DEFAULT_OUTPUT: json
          - run:
           name: Install awscli
           command: |
