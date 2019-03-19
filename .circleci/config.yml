@@ -25,7 +25,7 @@ jobs:
 deploy_to_stagging:
        docker:
         - image: circleci/python:3.6.1
-    environment:
+       environment:
          AWS_DEFAULT_OUTPUT: json
          - run:
           name: Install awscli
@@ -33,16 +33,16 @@ deploy_to_stagging:
             python3 -m venv venv
             . venv/bin/activate
             pip install -r requirements.txt
-    steps:
-      - checkout
-      - run:
+       steps:
+         - checkout
+         - run:
           name: Setup aws environment variables
           command: |
             echo 'export ECR_REPOSITORY_NAME="${AWS_RESOURCE_NAME_PREFIX}"' >> $BASH_ENV
             echo 'export ECS_CLUSTER_NAME="${AWS_RESOURCE_NAME_PREFIX}-cluster"' >> $BASH_ENV
             echo 'export ECS_SERVICE_NAME="${AWS_RESOURCE_NAME_PREFIX}-service"' >> $BASH_ENV
-      - setup_remote_docker
-      - run:
+          - setup_remote_docker
+          - run:
           name: Docker build and push
           command: |
             |
@@ -50,7 +50,7 @@ deploy_to_stagging:
              . venv/bin/activate
             eval $(aws ecr get-login --region $AWS_DEFAULT_REGION --no-include-email)
             docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$ECR_REPOSITORY_NAME:$CIRCLE_SHA1
-      - run:
+        - run:
           name: Deploy to Kubernetes
           command: |
             envsubst < ${HOME}/project/k8s.yml > ${HOME}/patched_k8s.yml
