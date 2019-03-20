@@ -31,18 +31,11 @@ jobs:
       - checkout
       - setup_remote_docker
       - run:
-        name: Install PIP
-        command: sudo apt-get install python-pip
-      - run:
-        name: Install awscli
-        command: sudo pip install awscli
-      # - run:
-      #     name: Install awscli
-      #     command: |
-      #       python3 -m venv venv
-      #       . venv/bin/activate
-      #       pip install --upgrade pip
-
+          name: Install awscli
+          command: |
+            python3 -m venv venv
+            . venv/bin/activate
+            pip install -r requirements.txt
       - run:
           name: Setup aws environment variables
           command: |
