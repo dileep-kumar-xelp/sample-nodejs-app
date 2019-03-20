@@ -1,14 +1,12 @@
 version: 2
 jobs:
   build:
-    working_directory: ~/sample-nodejs-app
+    working_directory: ~/agebold-api
     docker:
-      - image: circleci/node:9.11.2
+      - image: circleci/node:9
+      - image: mongo:3.4.4
     steps:
       - checkout
-      - run:
-          name: update-npm
-          command: "sudo npm install -g npm@5"
       - restore_cache:
           key: dependency-cache-{{ checksum "package.json" }}
       - run:
@@ -23,15 +21,42 @@ jobs:
           command: npm run-script lint
       - run:
           name: Testing
-          command: npm test
+          command: npm run-script test
   deploy:
-    machine:
-      enabled: true
+    docker:
+      - image: circleci/python:3.6.1
+    environment:
+      AWS_DEFAULT_OUTPUT: json
     steps:
+      - checkout
+      - setup_remote_docker
       - run:
-          name: Deploy Over SSH
+        name: Install awscli
+        command: |
+          python3 -m venv venv
+          . venv/bin/activate
+          pip install -r requirements.txt
+      - run:
+          name: Setup aws environment variables
           command: |
-            ssh ubuntu@ec2-52-66-243-203.ap-south-1.compute.amazonaws.com "cd sample-nodejs-app && npm run-script deploy"
+            echo 'export ECR_REPOSITORY_NAME="${AWS_RESOURCE_NAME_PREFIX}"' >> $BASH_ENV
+            echo 'export ECS_CLUSTER_NAME="${AWS_RESOURCE_NAME_PREFIX}-cluster"' >> $BASH_ENV
+            echo 'export ECS_SERVICE_NAME="${AWS_RESOURCE_NAME_PREFIX}-service"' >> $BASH_ENV
+      - run:
+          name: Docker build and push
+          command: |
+            |
+            docker build -t ${FULL_IMAGE_NAME}/$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$ECR_REPOSITORY_NAME:$CIRCLE_SHA1 .
+            . venv/bin/activate
+            eval $(aws ecr get-login --region $AWS_DEFAULT_REGION --no-include-email)
+            docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$ECR_REPOSITORY_NAME:$CIRCLE_SHA1
+      - run:
+          name: Deploy to Kubernetes
+          command: |
+            envsubst < ${HOME}/project/k8s.yml > ${HOME}/patched_k8s.yml
+            kubectl apply -f ${HOME}/patched_k8s.yml
+            kubectl rollout status deployment/${PROJECT_NAME}
+
 workflows:
   version: 2
   build-and-deploy:
@@ -42,4 +67,5 @@ workflows:
             - build
           filters:
             branches:
-              only: master
+              only: -staging
+                -master

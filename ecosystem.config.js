@@ -2,7 +2,7 @@ module.exports = {
   apps: [
     {
       name: "sample-nodejs-app",
-      script: "./build/index.js",
+      script: "./build/.",
       watch: true,
       env_production: {
         NODE_ENV: "production"
