@@ -30,6 +30,10 @@ jobs:
     steps:
       - checkout
       - setup_remote_docker
+      - attach_workspace:
+          at: workspace
+      - restore_cache:
+          key: v1-{{ checksum "requirements.txt" }}
       - run:
           name: Install awscli
           command: |
@@ -37,6 +41,10 @@ jobs:
             . venv/bin/activate
             pip install --upgrade pip
             pip install -r requirements.txt
+      - save_cache:
+          key: v1-{{ checksum "requirements.txt" }}
+          paths:
+            - "venv"
       - run:
           name: Setup aws environment variables
           command: |
