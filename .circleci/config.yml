@@ -35,7 +35,7 @@ jobs:
           command: |
             python3 -m venv venv
             . venv/bin/activate
-            pip install --upgrade -r requirements.txt
+            pip install --upgrade pip
 
       - run:
           name: Setup aws environment variables
