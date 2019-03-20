@@ -22,7 +22,7 @@ jobs:
       - run:
           name: Testing
           command: npm run-script test
-deploy_to_stagging:
+deploy:
   docker:
     - image: circleci/python:3.6.1
   environment:
