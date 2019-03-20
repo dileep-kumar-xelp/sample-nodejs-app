@@ -22,40 +22,40 @@ jobs:
       - run:
           name: Testing
           command: npm run-script test
-  deploy_to_stagging:
+  deploy:
     docker:
       - image: circleci/python:3.6.1
-     environment:
+    environment:
       AWS_DEFAULT_OUTPUT: json
-     steps:
+    steps:
       - checkout
       - setup_remote_docker
       - run:
         name: Install awscli
         command: |
-           python3 -m venv venv
-           . venv/bin/activate
-           pip install -r requirements.txt
+          python3 -m venv venv
+          . venv/bin/activate
+          pip install -r requirements.txt
       - run:
-         name: Setup aws environment variables
-         command: |
-           echo 'export ECR_REPOSITORY_NAME="${AWS_RESOURCE_NAME_PREFIX}"' >> $BASH_ENV
-           echo 'export ECS_CLUSTER_NAME="${AWS_RESOURCE_NAME_PREFIX}-cluster"' >> $BASH_ENV
-           echo 'export ECS_SERVICE_NAME="${AWS_RESOURCE_NAME_PREFIX}-service"' >> $BASH_ENV 
+          name: Setup aws environment variables
+          command: |
+            echo 'export ECR_REPOSITORY_NAME="${AWS_RESOURCE_NAME_PREFIX}"' >> $BASH_ENV
+            echo 'export ECS_CLUSTER_NAME="${AWS_RESOURCE_NAME_PREFIX}-cluster"' >> $BASH_ENV
+            echo 'export ECS_SERVICE_NAME="${AWS_RESOURCE_NAME_PREFIX}-service"' >> $BASH_ENV
       - run:
-         name: Docker build and push
-         command: |
-           |
+          name: Docker build and push
+          command: |
+            |
             docker build -t ${FULL_IMAGE_NAME}/$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$ECR_REPOSITORY_NAME:$CIRCLE_SHA1 .
             . venv/bin/activate
-           eval $(aws ecr get-login --region $AWS_DEFAULT_REGION --no-include-email)
-           docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$ECR_REPOSITORY_NAME:$CIRCLE_SHA1
+            eval $(aws ecr get-login --region $AWS_DEFAULT_REGION --no-include-email)
+            docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$ECR_REPOSITORY_NAME:$CIRCLE_SHA1
       - run:
-         name: Deploy to Kubernetes
-         command: |
-           envsubst < ${HOME}/project/k8s.yml > ${HOME}/patched_k8s.yml
-           kubectl apply -f ${HOME}/patched_k8s.yml
-           kubectl rollout status deployment/${PROJECT_NAME}
+          name: Deploy to Kubernetes
+          command: |
+            envsubst < ${HOME}/project/k8s.yml > ${HOME}/patched_k8s.yml
+            kubectl apply -f ${HOME}/patched_k8s.yml
+            kubectl rollout status deployment/${PROJECT_NAME}
 
 workflows:
   version: 2
@@ -68,4 +68,4 @@ workflows:
           filters:
             branches:
               only: -staging
-                    -master
+                -master
